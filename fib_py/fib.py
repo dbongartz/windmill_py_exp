@@ -1,6 +1,7 @@
-from typing import Self
+from typing import Self, Generator
 
 
+# Class with __repr__ and example for Iterator (commented out)
 class Fib:
     def __init__(self) -> None:
         self._curr: int = 0
@@ -10,14 +11,24 @@ class Fib:
         return f"{self._curr}"
 
     def advance(self) -> None:
-        next = self._curr + self._next
-        self._curr = self._next
-        self._next = next
+        self._curr, self._next = (self._next, self._curr + self._next)
+
+    # Equivalent to FibIter without class extension (inheritance)
+    # def __iter__(self) -> Self:
+    #     self._curr: int = 0
+    #     self._next: int = 1
+    #     return self
+
+    # def __next__(self) -> int:
+    #     curr = self._curr
+    #     self.advance()
+    #     return curr
 
 
+# Class extension / inheritance
 class FibIter(Fib):
     def __init__(self) -> None:
-        super().__init__()  # IMPORTANT!
+        super().__init__()  # IMPORTANT! inheritance
 
     def __iter__(self) -> Self:
         self._curr: int = 0
@@ -28,3 +39,11 @@ class FibIter(Fib):
         curr = self._curr
         self.advance()
         return curr
+
+
+# Generator function doing the same as Iterator
+def fib_generator() -> Generator[int, None, None]:
+    curr, next = (0, 1)
+    while True:
+        yield curr
+        curr, next = (next, curr + next)
