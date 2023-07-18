@@ -28,3 +28,11 @@ def test_fib_gen():
     actual: list[int] = list(islice(dut, 0, len(expected)))
 
     assert expected == actual
+
+
+def test_fib_gen_len():
+    expected: list[int] = [0, 1, 1, 2, 3, 5, 8]
+    dut = fib_generator(len(expected))
+    actual: list[int] = list(dut)
+
+    assert expected == actual

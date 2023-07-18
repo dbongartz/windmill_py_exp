@@ -42,8 +42,13 @@ class FibIter(Fib):
 
 
 # Generator function doing the same as Iterator
-def fib_generator() -> Generator[int, None, None]:
+def fib_generator(n: int | None = None) -> Generator[int, None, None]:
     curr, next = (0, 1)
-    while True:
-        yield curr
-        curr, next = (next, curr + next)
+    if n:
+        for _ in range(n):
+            yield curr
+            curr, next = (next, curr + next)
+    else:
+        while True:
+            yield curr
+            curr, next = (next, curr + next)
