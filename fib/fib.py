@@ -111,6 +111,7 @@ for n, i in enumerate(iter(fibs)):
     if n >= 5:
         break
 
+
 # Same effect as above class iterator just as a python "generator function"
 def fib_generator() -> Generator[int, None, None]:
     # Those variables exist as long as the function is "existing"
@@ -130,18 +131,3 @@ for n, i in enumerate(fib_generator()):
 
 
 lst = list([1, 2, 3, 4])
-
-for e in lst:
-
-
-# # Generator function with a limit count
-# def fib_generator(n: int | None = None) -> Generator[int, None, None]:
-#     curr, next = (0, 1)
-#     if n:
-#         for _ in range(n):
-#             yield curr
-#             curr, next = (next, curr + next)
-#     else:
-#         while True:
-#             yield curr
-#             curr, next = (next, curr + next)
