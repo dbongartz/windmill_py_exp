@@ -1,6 +1,6 @@
 # Fibonacci: 0 1 1 2 3 5 8 13
 
-from typing import List
+from typing import Generator, List
 
 # loop 1
 
@@ -64,11 +64,25 @@ class Fib:
         self.curr: int = 0
         self.next: int = 1
 
-    # Associated method, "self" has special meaning being of type of class: Fibb
+    # Associated method, "self" has special meaning being of type of class: Fib
     def generate_next(self) -> int:
-        tmp = self.curr # Needed to return 0 first
+        tmp = self.curr  # Needed to return 0 first
         self.curr, self.next = (self.next, self.next + self.curr)
         return tmp
+
+    # next two functions enable this class to be used in iterator contexts (e.g. for loop)
+
+    # This will be called on every next() of an iterator. E.g. every loop or obj.next()
+    def __next__(self):
+        tmp = self.curr  # Needed to return 0 first
+        self.curr, self.next = (self.next, self.next + self.curr)
+        return tmp
+
+    # This will be called on creation of the iterator. E.g. iter(obj) or implicit in a for loop
+    def __iter__(self):
+        self.curr: int = 0
+        self.next: int = 1
+        return self
 
 
 # Free method, "self" has no special meaningg
@@ -91,3 +105,43 @@ fib_curr = generate_next_free(fibs)  # 2
 fib_curr = generate_next_free(fibs)  # 3
 
 assert 3 == fib_curr
+
+for n, i in enumerate(iter(fibs)):
+    print(f"{i}")
+    if n >= 5:
+        break
+
+# Same effect as above class iterator just as a python "generator function"
+def fib_generator() -> Generator[int, None, None]:
+    # Those variables exist as long as the function is "existing"
+    # E.g. if we would call return anywhere in this function it would stop "existing"
+    # and we could start again.
+    curr, next = (0, 1)
+    while True:
+        yield curr # Execution always stops here and yields the result to the caller
+        # Next function call execution continues here
+        curr, next = (next, curr + next)
+
+
+for n, i in enumerate(fib_generator()):
+    print(f"{i}")
+    if n >= 5:
+        break
+
+
+lst = list([1, 2, 3, 4])
+
+for e in lst:
+
+
+# # Generator function with a limit count
+# def fib_generator(n: int | None = None) -> Generator[int, None, None]:
+#     curr, next = (0, 1)
+#     if n:
+#         for _ in range(n):
+#             yield curr
+#             curr, next = (next, curr + next)
+#     else:
+#         while True:
+#             yield curr
+#             curr, next = (next, curr + next)
